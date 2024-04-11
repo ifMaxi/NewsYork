@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">New\'s York</string>
+
+    <!-- Content description -->
+    <string name="menu">Menu</string>
+    <string name="search">Search</string>
+
+    <string name="lost_connection">Lost connection</string>
+    
+    <!-- Navigation -->
+    <string name="home_nav">Home</string>
+    <string name="search_nav">Search</string>
+    <string name="top_stories_nav">Top stories</string>
+</resources>
