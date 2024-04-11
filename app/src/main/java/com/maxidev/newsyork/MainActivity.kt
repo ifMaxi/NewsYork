@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.maxidev.newsyork.navigation.NavigationGraph
-import com.maxidev.newsyork.ui.theme.NewsYorkTheme
+import com.maxidev.newsyork.core.ui.theme.NewsYorkTheme
+import com.maxidev.newsyork.core.navigation.NavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
