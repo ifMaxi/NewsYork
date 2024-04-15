@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -21,10 +22,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.maxidev.newsyork.R
-import com.maxidev.newsyork.search.presentation.ArticleSearchScreen
 import com.maxidev.newsyork.core.presentation.components.ComponentTopBar
+import com.maxidev.newsyork.core.ui.theme.josefinSans
 import com.maxidev.newsyork.homenews.presentation.NewsWireScreen
+import com.maxidev.newsyork.homenews.presentation.NewsWireViewModel
+import com.maxidev.newsyork.search.presentation.ArtSearchViewModel
+import com.maxidev.newsyork.search.presentation.ArticleSearchScreen
 import com.maxidev.newsyork.topnews.presentation.TopStoriesScreen
+import com.maxidev.newsyork.topnews.presentation.TopStoriesViewModel
 
 @Composable
 fun NavigationGraph(
@@ -34,9 +39,7 @@ fun NavigationGraph(
 ) {
     Scaffold(
         topBar = {
-            ComponentTopBar(
-                title = R.string.app_name
-            )
+            ComponentTopBar(title = R.string.app_name)
         },
         bottomBar = {
             NavigationBar(
@@ -73,7 +76,10 @@ fun NavigationGraph(
                             )
                         },
                         label = {
-                            Text(text = stringResource(id = screen.label))
+                            Text(
+                                text = stringResource(id = screen.label),
+                                fontFamily = josefinSans
+                            )
                         }
                     )
                 }
@@ -87,13 +93,19 @@ fun NavigationGraph(
             startDestination = startDestinations.route
         ) {
             composable(route = startDestinations.route) {
-                NewsWireScreen()
+                val viewmodel = hiltViewModel<NewsWireViewModel>()
+
+                NewsWireScreen(viewModel = viewmodel)
             }
             composable(route = Destinations.SearchArticleScreen.route) {
-                ArticleSearchScreen()
+                val viewmodel = hiltViewModel<ArtSearchViewModel>()
+
+                ArticleSearchScreen(viewModel = viewmodel)
             }
             composable(route = Destinations.StoriesScreen.route) {
-                TopStoriesScreen()
+                val viewmodel = hiltViewModel<TopStoriesViewModel>()
+
+                TopStoriesScreen(viewModel = viewmodel)
             }
         }
     }

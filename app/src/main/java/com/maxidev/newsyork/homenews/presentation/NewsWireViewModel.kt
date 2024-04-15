@@ -24,7 +24,7 @@ class NewsWireViewModel @Inject constructor(
         fetchedNewsWire()
     }
 
-    private fun fetchedNewsWire() {
+    fun fetchedNewsWire() {
         viewModelScope.launch {
             _nwResponseStatus.value = NwResponseStat.Loading
 

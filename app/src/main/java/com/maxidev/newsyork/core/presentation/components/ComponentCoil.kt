@@ -31,7 +31,7 @@ fun ComponentCoil(
         .diskCachePolicy(CachePolicy.ENABLED)
         .networkCachePolicy(CachePolicy.ENABLED)
         .allowHardware(true)
-        .error(R.drawable.outline_broken_image_24) // TODO: Change error image
+        .error(R.drawable.image_not_loaded)
         .build()
 
     AsyncImage(

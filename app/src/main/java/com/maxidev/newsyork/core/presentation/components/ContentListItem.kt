@@ -1,4 +1,4 @@
-package com.maxidev.newsyork.homenews.presentation.components
+package com.maxidev.newsyork.core.presentation.components
 
 import android.content.Intent
 import android.net.Uri
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -19,16 +20,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.startActivity
-import com.maxidev.newsyork.core.presentation.components.ComponentCoil
-import com.maxidev.newsyork.core.ui.theme.NewsYorkTheme
 
 @Composable
-fun WireItem(
+fun ContentListItem(
     modifier: Modifier = Modifier,
     image: String?,
     title: String?,
@@ -54,6 +52,7 @@ fun WireItem(
     ) {
         Column(
             modifier = Modifier
+                .wrapContentHeight()
                 .fillMaxWidth()
                 .padding(8.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -94,6 +93,7 @@ private fun DescriptionsItem(
 
     Column(
         modifier = modifier
+            .wrapContentHeight()
             .fillMaxWidth()
             .padding(4.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -113,21 +113,6 @@ private fun DescriptionsItem(
             text = byLine ?: "",
             fontSize = 12.sp,
             fontWeight = FontWeight.Light
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun WireItemPreview() {
-    NewsYorkTheme {
-        WireItem(
-            image = "Image",
-            title = "Lorem impsum title",
-            abstract = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
-                    "Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            byLine = "Lorem bylINE",
-            url = "url"
         )
     }
 }

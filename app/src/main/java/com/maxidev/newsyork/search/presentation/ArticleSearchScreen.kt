@@ -2,6 +2,13 @@ package com.maxidev.newsyork.search.presentation
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,7 +46,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -47,6 +54,7 @@ import androidx.paging.compose.itemKey
 import com.maxidev.newsyork.R
 import com.maxidev.newsyork.core.presentation.components.ComponentCoil
 import com.maxidev.newsyork.core.presentation.components.ComponentStatus
+import com.maxidev.newsyork.core.presentation.components.ScrollToTopButton
 import com.maxidev.newsyork.core.utils.dateTimeUtils
 import com.maxidev.newsyork.search.domain.model.ArtSearch
 import com.maxidev.newsyork.search.presentation.components.ArtSearchBar
@@ -55,7 +63,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ArticleSearchScreen(
     modifier: Modifier = Modifier,
-    viewModel: ArtSearchViewModel = hiltViewModel()
+    viewModel: ArtSearchViewModel
 ) {
     val query by viewModel.search
     val searchedArticles = viewModel.searchedArt.collectAsLazyPagingItems()
@@ -64,7 +72,7 @@ fun ArticleSearchScreen(
     val focusManager = LocalFocusManager.current
 
     Scaffold(
-        topBar = {
+        bottomBar = {
             ArtSearchBar(
                 value = query,
                 onValueChange = viewModel::onSearchChange,
@@ -104,6 +112,12 @@ private fun ArtContent(
     items: LazyPagingItems<ArtSearch>
 ) {
     val lazyState: LazyListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    val showButton by remember {
+        derivedStateOf {
+            lazyState.firstVisibleItemIndex > 0
+        }
+    }
 
     if (items.loadState.refresh is LoadState.Loading) {
         ComponentStatus(
@@ -140,6 +154,22 @@ private fun ArtContent(
         ComponentStatus(
             animationImage = R.raw.net_lose,
             text = null
+        )
+    }
+
+    AnimatedVisibility(
+        visible = showButton,
+        enter = slideInVertically() + expandVertically() + fadeIn(),
+        exit = slideOutVertically() + shrinkVertically() + fadeOut()
+    ) {
+        ScrollToTopButton(
+            modifier = Modifier
+                .padding(top = 20.dp),
+            onClick = {
+                scope.launch {
+                    lazyState.animateScrollToItem(index = 0)
+                }
+            }
         )
     }
 }

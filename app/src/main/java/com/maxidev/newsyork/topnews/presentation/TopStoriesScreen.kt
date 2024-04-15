@@ -1,19 +1,19 @@
 package com.maxidev.newsyork.topnews.presentation
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
@@ -21,6 +21,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -28,26 +29,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maxidev.newsyork.R
 import com.maxidev.newsyork.core.presentation.components.ComponentStatus
+import com.maxidev.newsyork.core.presentation.components.ContentListItem
+import com.maxidev.newsyork.core.presentation.components.ScrollToTopButton
+import com.maxidev.newsyork.core.ui.theme.josefinSans
 import com.maxidev.newsyork.core.utils.TopStoriesUtils
-import com.maxidev.newsyork.homenews.presentation.components.WireItem
 import com.maxidev.newsyork.topnews.domain.model.TopStories
+import kotlinx.coroutines.launch
 
 @Composable
 fun TopStoriesScreen(
     modifier: Modifier = Modifier,
-    viewModel: TopStoriesViewModel = hiltViewModel()
+    viewModel: TopStoriesViewModel
 ) {
     val state by viewModel.storiesResponseStat.collectAsStateWithLifecycle()
     val topics = TopStoriesUtils.topList
     var tabIndex by remember { mutableIntStateOf(0) }
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchedStories("arts")
@@ -61,7 +61,11 @@ fun TopStoriesScreen(
                 topics.forEachIndexed { index, s ->
                     Tab(
                         text = {
-                            Text(text = s, maxLines = 1)
+                            Text(
+                                text = s,
+                                maxLines = 1,
+                                fontFamily = josefinSans
+                            )
                         },
                         selected = tabIndex == index,
                         onClick = {
@@ -74,7 +78,7 @@ fun TopStoriesScreen(
         }
     ) { paddingValues ->
         StoryResponseStat(
-            modifier = Modifier
+            modifier = modifier
                 .padding(paddingValues),
             status = state
         )
@@ -109,6 +113,12 @@ private fun StoryContent(
 ) {
     val lazyState: LazyListState = rememberLazyListState()
     val remModel = remember(model) { model }
+    val scope = rememberCoroutineScope()
+    val showButton by remember {
+        derivedStateOf {
+            lazyState.firstVisibleItemIndex > 0
+        }
+    }
 
     LazyColumn(
         modifier = modifier
@@ -124,7 +134,7 @@ private fun StoryContent(
             contentType = { it.title }
         ) { item ->
             item.let { param ->
-                WireItem(
+                ContentListItem(
                     image = param.multimedia,
                     title = param.title,
                     abstract = param.abstract,
@@ -135,48 +145,20 @@ private fun StoryContent(
             HorizontalDivider()
         }
     }
-}
 
-// ---------------------------------------------------------------------------------
-
-@Composable
-private fun NameList(
-    onClick: (String) -> Unit
-) {
-    val listName = TopStoriesUtils.topList
-
-    LazyVerticalGrid(columns = GridCells.Adaptive(150.dp)) {
-        items(items = listName) { item ->
-            StoryNameItem(
-                name = item,
-                onClick = onClick
-            )
-        }
-    }
-}
-
-@Composable
-private fun StoryNameItem(
-    name: String,
-    onClick: (String) -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .size(width = 200.dp, height = 100.dp)
-            .clickable { onClick(name) }
+    AnimatedVisibility(
+        visible = showButton,
+        enter = slideInVertically() + expandVertically() + fadeIn(),
+        exit = slideOutVertically() + shrinkVertically() + fadeOut()
     ) {
-        Box(
+        ScrollToTopButton(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(4.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = name,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
+                .padding(top = 60.dp),
+            onClick = {
+                scope.launch {
+                    lazyState.animateScrollToItem(index = 0)
+                }
+            }
+        )
     }
 }
