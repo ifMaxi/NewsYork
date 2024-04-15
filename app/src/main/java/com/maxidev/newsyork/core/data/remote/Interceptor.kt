@@ -29,7 +29,8 @@ class CacheInterceptor: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         val cacheControl = CacheControl.Builder()
-            .maxAge(10, TimeUnit.DAYS)
+            //.maxAge(1, TimeUnit.DAYS)
+            .minFresh(10, TimeUnit.MINUTES)
             .build()
 
         return response.newBuilder()
