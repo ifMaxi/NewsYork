@@ -18,6 +18,22 @@
           <timeTargetWasSelectedWithDropDown value="2024-04-10T19:33:31.414110500Z" />
         </State>
       </entry>
+      <entry key="WelcomeScreen">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\maxi9\.android\avd\Api_32_-_Android_12.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-16T13:56:29.468330200Z" />
+        </State>
+      </entry>
       <entry key="WireItemPreview">
         <State />
       </entry>
