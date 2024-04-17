@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -20,7 +21,8 @@ import androidx.compose.ui.unit.sp
 fun ComponentStatus(
     modifier: Modifier = Modifier,
     @RawRes animationImage: Int,
-    @StringRes text: Int?
+    @StringRes text: Int?,
+    size: DpSize
 ) {
     Column(
         modifier = modifier
@@ -30,7 +32,8 @@ fun ComponentStatus(
         verticalArrangement = Arrangement.Center
     ) {
         ComponentLottie(
-            animatedImage = animationImage
+            animatedImage = animationImage,
+            size = size
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text(

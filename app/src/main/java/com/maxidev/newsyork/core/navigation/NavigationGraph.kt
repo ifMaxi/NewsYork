@@ -92,7 +92,7 @@ fun NavigationGraph(
             navController = navController,
             startDestination = startDestinations.route
         ) {
-            composable(route = startDestinations.route) {
+            composable(route = Destinations.WireScreen.route) {
                 val viewmodel = hiltViewModel<NewsWireViewModel>()
 
                 NewsWireScreen(viewModel = viewmodel)

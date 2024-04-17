@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maxidev.newsyork.R
@@ -93,11 +94,13 @@ private fun StoryResponseStat(
     when (status) {
         is StoriesResponseStat.Error -> ComponentStatus(
             animationImage = R.raw.net_lose,
-            text = R.string.lost_connection
+            text = R.string.lost_connection,
+            size = DpSize(width = 100.dp, height = 100.dp)
         )
         StoriesResponseStat.Loading -> ComponentStatus(
             animationImage = R.raw.load_lines,
-            text = null
+            text = null,
+            size = DpSize(width = 380.dp, height = 380.dp)
         )
         is StoriesResponseStat.Success -> StoryContent(
             modifier = modifier,

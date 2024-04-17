@@ -122,7 +122,8 @@ private fun ArtContent(
     if (items.loadState.refresh is LoadState.Loading) {
         ComponentStatus(
             animationImage = R.raw.load_lines,
-            text = null
+            text = null,
+            size = DpSize(width = 380.dp, height = 380.dp)
         )
     }
 
@@ -153,7 +154,8 @@ private fun ArtContent(
     if (items.loadState.refresh is LoadState.Error) {
         ComponentStatus(
             animationImage = R.raw.net_lose,
-            text = null
+            text = null,
+            size = DpSize(width = 100.dp, height = 100.dp)
         )
     }
 
