@@ -89,14 +89,8 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    // Room
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.paging)
-
     // Retrofit
-    implementation (libs.retrofit)
+    implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     // OkHttp
